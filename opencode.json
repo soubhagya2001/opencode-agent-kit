@@ -90,10 +90,10 @@
       "enabled": false
     },
     "playwright": {
-      "type": "stdio",
-      "command": "npx",
-      "args": ["-y", "@modelcontextprotocol/server-playwright"],
+      "type": "local",
+      "command": ["npx", "-y", "@playwright/mcp@latest"],
       "enabled": true,
+      "timeout": 90000,
       "description": "Browser automation and E2E testing with Playwright"
     },
     "stitch": {
@@ -173,12 +173,6 @@
       "description": "shadcn/ui registry, component scaffolding, and docs for React/shadcn work"
     }
   },
-  "plugin": [
-    ".opencode/plugins/agentmemory-capture.ts",
-    ".opencode/plugins/ponytail.mjs",
-    ".opencode/plugins/env-protection.ts",
-    ".opencode/plugins/inject-env.ts"
-  ],
   "agent": {
     "leader": {
       "description": "IT Leader & Technical Project Manager \u2014 analyzes requirements, designs architecture, decomposes tasks, delegates to subagents, and unifies outputs",

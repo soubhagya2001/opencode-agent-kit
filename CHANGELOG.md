@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [Unreleased]
+
+### Fixed
+
+- **Plugins migrated to the OpenCode 2 plugin API** (v2.2.7). The v1-style plugins failed to load (`Plugin must export a default definition with an id and an effect or setup function`):
+  - `agentmemory-capture.ts` replaced with the official v0.9.33 file from the `@agentmemory/agentmemory` package — it exports `{ id, setup, server }`, fixes the wrong port (:3113 → :3111) and the V1-only event assumptions. The kit previously shipped a stale trimmed copy.
+  - `env-protection.ts` and `inject-env.ts` rewritten as `Plugin.define({ id, setup })` server plugins (`ctx.tool.hook("execute.before")` / `ctx.shell.hook("create.before")`).
+  - `ponytail.mjs` rewritten for V2 (`ctx.session.hook("context")` for system-prompt injection, `ctx.session.hook("prompt")` for `/ponytail <level>` persistence; the `config` skills hook was dropped — V2 auto-discovers skills). Failures are logged, never thrown into a session.
+- MCP fix (already committed as `3d1f8af`): agentmemory hook spawns `npx.cmd` on Windows, 90s timeouts for npx-based local MCPs, sonarqube disabled (remote returns 502).
+
+---
+
 ## [1.4.0] - 2026-11-13
 
 ### Added
