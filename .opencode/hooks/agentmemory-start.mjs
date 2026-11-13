@@ -1,6 +1,8 @@
 #!/usr/bin/env node
 import { spawn } from 'child_process';
 
+const NPX_BIN = process.platform === 'win32' ? 'npx.cmd' : 'npx';
+
 const PORT = process.env.AGENTMEMORY_URL || 'http://localhost:3111';
 const HEALTH = `${PORT}/agentmemory/livez`;
 
@@ -24,7 +26,7 @@ async function waitForServer(timeout = 15000) {
 
 async function main() {
   if (!(await isRunning())) {
-    const proc = spawn('npx', ['@agentmemory/agentmemory'], {
+    const proc = spawn(NPX_BIN, ['@agentmemory/agentmemory'], {
       stdio: 'ignore',
       detached: true,
     });
@@ -37,7 +39,7 @@ async function main() {
     }
   }
 
-  const mcp = spawn('npx', ['-y', '@agentmemory/mcp', ...process.argv.slice(2)], {
+  const mcp = spawn(NPX_BIN, ['-y', '@agentmemory/mcp', ...process.argv.slice(2)], {
     stdio: ['inherit', 'inherit', 'inherit'],
   });
 

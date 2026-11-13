@@ -116,7 +116,7 @@
     "sonarqube": {
       "type": "remote",
       "url": "https://sonarqube-mcp.sadigit.co.id/mcp",
-      "enabled": true,
+      "enabled": false,
       "headers": {
         "Authorization": "Bearer ${SONARQUBE_TOKEN}",
         "SONARQUBE_TOOLSETS": "analysis,issues,security-hotspots,quality-gates,rules,duplications,measures,dependency-risks,coverage,sources,languages,portfolios,system,webhooks"
@@ -142,6 +142,7 @@
         "1200"
       ],
       "enabled": true,
+      "timeout": 90000,
       "description": "Chrome DevTools browser control: navigate, screenshot, inspect console/network/performance"
     },
     "agent-browser": {
@@ -155,6 +156,7 @@
         "core,network,react,tabs,debug"
       ],
       "enabled": true,
+      "timeout": 90000,
       "description": "Fast Rust-based browser automation: annotated screenshots, visual diff, React introspection"
     },
     "context7": {
@@ -167,6 +169,7 @@
       "type": "local",
       "command": ["npx", "-y", "shadcn@latest", "mcp"],
       "enabled": true,
+      "timeout": 90000,
       "description": "shadcn/ui registry, component scaffolding, and docs for React/shadcn work"
     }
   },
