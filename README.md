@@ -4,7 +4,7 @@
 
 # Agent Kit — Setup Guide
 
-Complete setup guide for the **Agent Kit** — a portable multi-stack AI agent system for OpenCode. Includes 33 specialized agents, 207 skill playbooks, 47 slash commands, 10 MCP servers, and an **automatic visual dev loop** for iterative UI development.
+Complete setup guide for the **Agent Kit** - a portable multi-stack AI agent system for OpenCode. Includes 47 specialized agents, 300+ skill playbooks, 75+ slash commands, 12 MCP servers, and an **automatic visual dev loop** for iterative UI development.
 
 ```bash
 npx opencode-agent-kit init    # One command. Full team.
@@ -85,7 +85,7 @@ npx opencode-agent-kit init --local
 
 ## Overview
 
-Think of Agent Kit as an AI development team you install into any OpenCode project. An **IT Leader** orchestrates 33 specialized agents — each one an expert in their stack. You describe what to build; the team handles the rest.
+Think of Agent Kit as an AI development team you install into any OpenCode project. An **IT Leader** orchestrates 47 specialized agents — each one an expert in their stack. You describe what to build; the team handles the rest.
 
 This repository contains a complete OpenCode agent configuration with **Leader → Subagent** architecture for software development teams.
 
@@ -127,6 +127,20 @@ This repository contains a complete OpenCode agent configuration with **Leader �
   - `docs-lookup.md` — Documentation Lookup Specialist — `@docs`
   - `harness-optimizer.md` — Harness Optimizer & Cost Analysis — `@harness`
   - `loop-operator.md` — Autonomous Loop Operator — `@loop`
+  - `planner.md` — Project Planner & Requirements Analyst — `@planner`
+  - `product-manager.md` — Product Manager — `@product-manager`
+  - `architect.md` — Software Architect (advisory) — `@architect`
+  - `api-architect.md` — API Architect — `@api-architect`
+  - `data-engineer.md` — Data Engineer — `@data-engineer`
+  - `debugger.md` — Systematic Debugger — `@debugger`
+  - `test-engineer.md` — Test Engineer (TDD-first) — `@test-engineer`
+  - `security-auditor.md` — Security Auditor — `@security-auditor`
+  - `performance-optimizer.md` — Performance Optimizer — `@performance-optimizer`
+  - `code-archaeologist.md` — Code Archaeologist — `@code-archaeologist`
+  - `doc-writer.md` — Documentation Writer (Diataxis) — `@doc-writer`
+  - `cloud-architect.md` — Cloud Architect (AWS/Azure/GCP) — `@cloud-architect`
+  - `ruby-developer.md` — Ruby/Rails Developer — `@ruby-developer`
+  - `game-developer.md` — Game Developer — `@game-developer`
 - Internal documentation: `.opencode/docs/`
   - Frontend Nuxt: `.opencode/docs/frontend/nuxt/`
   - Frontend React: `.opencode/docs/frontend/react/`
@@ -307,6 +321,10 @@ cp .opencode/config.json /path/to/your-project/.opencode/config.json
 | `.opencode/commands/`       | Custom slash commands           | Optional    |
 | `.opencode/rules/`          | Coding rules                    | Optional    |
 | `.opencode/hooks/`          | Automation hooks                | Optional    |
+| `.opencode/workflows/`      | Multi-step workflow playbooks   | Optional    |
+| `.opencode/tools/`          | Custom agent tools              | Optional    |
+| `.opencode/plugins/`        | Runtime plugins                 | Optional    |
+| `.opencode/scripts/`        | Validation suite (Python)       | Optional    |
 
 ### Integration with Global OpenCode
 
@@ -324,7 +342,7 @@ To **customize** a built-in agent, create an agent with the **same name** in `.o
 
 ## Available Agents
 
-33 agents (33 registered in config) with **Leader → Subagent** architecture. Plus a **Visual Dev Loop** system for autonomous build-preview-fix cycles.
+47 agents (47 registered in config) with **Leader → Subagent** architecture. Plus a **Visual Dev Loop** system for autonomous build-preview-fix cycles.
 
 | Agent                           | File                          | Mode        | Role                                                                 |
 | ------------------------------- | ----------------------------- | ----------- | -------------------------------------------------------------------- |
@@ -358,8 +376,20 @@ To **customize** a built-in agent, create an agent with the **same name** in `.o
 | Docs Lookup                     | `docs-lookup.md`              | subagent    | Documentation lookup & synthesis via MCP tools                       |
 | Harness Optimizer               | `harness-optimizer.md`        | subagent    | Agent harness optimization, cost analysis, quality improvement       |
 | Loop Operator                   | `loop-operator.md`            | subagent    | Autonomous agent loop operation, monitoring, safe recovery           |
-
-|
+| **Project Planner**             | `planner.md`                  | subagent    | Phased plans, dependencies, risks, acceptance criteria (NEW v1.4.0)  |
+| **Product Manager**             | `product-manager.md`          | subagent    | Requirements discovery, user stories, PRD drafts (NEW v1.4.0)        |
+| **Software Architect**          | `architect.md`                | subagent    | Advisory system design, trade-offs, ADR documentation (NEW v1.4.0)   |
+| **API Architect**               | `api-architect.md`            | subagent    | REST/GraphQL contracts, versioning, pagination, errors (NEW v1.4.0)  |
+| **Data Engineer**               | `data-engineer.md`            | subagent    | ETL pipelines, warehouse modeling, batch/stream (NEW v1.4.0)         |
+| **Systematic Debugger**         | `debugger.md`                 | subagent    | 4-phase root-cause investigation, all stacks (NEW v1.4.0)            |
+| **Test Engineer**               | `test-engineer.md`            | subagent    | TDD-first unit/integration/E2E, owns test files (NEW v1.4.0)         |
+| **Security Auditor**            | `security-auditor.md`         | subagent    | OWASP threat modeling, secrets scan, auth flow review (NEW v1.4.0)   |
+| **Performance Optimizer**       | `performance-optimizer.md`    | subagent    | Measurement-first profiling, verified optimization (NEW v1.4.0)      |
+| **Code Archaeologist**          | `code-archaeologist.md`       | subagent    | Legacy code intent, architecture drift documentation (NEW v1.4.0)    |
+| **Documentation Writer**        | `doc-writer.md`               | subagent    | Diataxis docs, README/CHANGELOG maintenance (NEW v1.4.0)             |
+| **Cloud Architect**             | `cloud-architect.md`          | subagent    | AWS/Azure/GCP, serverless, cost optimization (NEW v1.4.0)            |
+| **Ruby Developer**              | `ruby-developer.md`           | subagent    | Ruby 3.3+, Rails 7+, Hotwire, Active Record (NEW v1.4.0)             |
+| **Game Developer**              | `game-developer.md`           | subagent    | Web/PC/mobile/VR-AR games, engine guidance (NEW v1.4.0)              |
 
 ### How It Works
 
@@ -580,6 +610,8 @@ From `.opencode/config.json`, agents use the following MCP servers:
 | `agentmemory`     | local  | enabled  | Persistent cross-session memory (53 memory tools)              |
 | `chrome-devtools` | local  | enabled  | Full Chrome DevTools: navigation, screenshots, console/network |
 | `agent-browser`   | local  | enabled  | Rust browser automation: annotated screenshots, visual diff    |
+| `context7`        | remote | enabled  | Live library/API docs lookup, no key required (NEW v1.4.0)     |
+| `shadcn`          | local  | enabled  | shadcn/ui registry & docs for React work (NEW v1.4.0)          |
 
 To enable Figma MCP:
 

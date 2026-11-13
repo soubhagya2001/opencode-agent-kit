@@ -8,7 +8,7 @@ import { homedir, platform } from 'os';
  * This is where OpenCode reads its config from on each platform.
  * On macOS, OpenCode stores config at ~/.config/opencode/.
  * On Linux, follows XDG spec: $XDG_CONFIG_HOME/opencode/.
- * On Windows, follows %APPDATA%\opencode\.
+ * On Windows, follows %USERPROFILE%\.config\opencode\.
  *
  * Resolution order:
  *   1. $OPENCODE_HOME env var (full override)

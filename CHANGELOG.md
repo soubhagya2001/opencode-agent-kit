@@ -7,6 +7,35 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [1.4.0] - 2026-11-13
+
+### Added
+
+- **14 new agents** (integrated from skeletorflet/opencode-kit, rewritten in defuj house style, registered in `opencode.json` with prompt files, scoped permission blocks, and colors): `planner` (phased plans, dependencies, risks), `architect` (advisory design, ADRs), `product-manager` (requirements, user stories, PRD), `api-architect` (REST/GraphQL contracts as shared delegation contracts), `data-engineer` (ETL, warehouse, batch/stream), `debugger` (4-phase root-cause investigation), `test-engineer` (TDD-first unit/integration/E2E, owns test files), `security-auditor` (OWASP threat modeling, secrets scanning, auth-flow review), `performance-optimizer` (measurement-first profiling), `code-archaeologist` (legacy code intent, architecture drift), `doc-writer` (Diataxis docs), `cloud-architect` (AWS/Azure/GCP, serverless, cost), `ruby-developer` (Ruby 3.3+/Rails 7+), `game-developer` (cross-platform game dev). Total: 47 registered agents.
+- **88 new skills** copied from the donor kit after deduplication review (13 rejected as redundant with defuj equivalents, 6 skipped for name collisions — kept defuj versions). Total: 304 skills. Includes security suite, performance/infra, frontend/UX depth, games (11 skills), app-builder with 27 project templates, process/orchestration skills.
+- **8 new slash commands**: `/create`, `/enhance`, `/test`, `/review-pr`, `/audit-security`, `/fix-types`, `/gen-docs`, `/deploy-check` (donor's `/plan` skipped — defuj already has it). Total: 77 commands.
+- **3 new workflow playbooks** in `.opencode/workflows/`: `01-project-kickoff.md`, `02-tdd-feature.md`, `03-pre-flight-audit.md` (donor's `04-omo-main-flow` skipped — requires the external oh-my-opencode plugin).
+- **2 new plugins**: `env-protection.ts` (runtime block of `.env` file reads — defense in depth on top of the permission deny-lists, hardened to check both `filePath`/`file` args) and `inject-env.ts` (PROJECT_ROOT injection).
+- **2 new custom tools**: `.opencode/tools/read-env.ts` (env var name inspection) and `.opencode/tools/run-script.ts` (npm script runner) — both rewritten portably with `node:child_process` instead of Bun-only `Bun.$`.
+- **2 new MCP servers**: `context7` (remote, live library/API docs, no key) and `shadcn` (local, shadcn/ui registry & docs). Total: 12 MCP servers.
+- **Python validation suite** in `.opencode/scripts/` (8 scripts): `verify_all.py`, `checklist.py`, `auto_preview.py`, `session_manager.py`, `audit_skills.py`, `linters/lint_runner.py`, `linters/md_validator.py`, `testrunners/test_runner_multi.py` (donor suite adapted; donor's `security_scan.py`/`ux_audit.py` not carried over; donor's `ruplacer.exe` binary NOT copied — unvetted provenance).
+- **IT Leader orchestration upgrades** (merged from donor's orchestrator concepts, preserving defuj's central-leader model): File-Type Ownership Matrix (boundary enforcement per file pattern with owner/advisory roles), Plan Pre-Flight Checkpoint (9-point checklist before any multi-agent delegation), Clarify-Before-Orchestrate Gate (max one structured clarification round before breaking down work), Agent States lifecycle (BACKLOG → TODO → IN_PROGRESS → REVIEW → DONE / BLOCKED / CANCELLED), Synthesis Report Format (unified multi-delegation report with integration checks and contract-violation handling). Also added the 14 new agents to routing tables, quick reference, capabilities reference, conventions and verification tables.
+- **5 new documentation files**: `docs/AGENT_ARCHITECTURE.md`, `docs/AGENT_DIRECTORY.md`, `docs/DELEGATION_WORKFLOW.md`, `docs/INSTALLATION.md`, `docs/CONFIGURATION.md` (plus `docs/INTEGRATION_ANALYSIS.md` from the analysis phase).
+- **Template/installer support**: `scripts/generate-template.sh` now includes `workflows/`, `tools/`, `scripts/` (and `agents/` alias for prompts) in the template copy list; `bin/commands/init.mjs` copies `.opencode/` recursively so no change was needed there.
+
+### Changed
+
+- `package.json` version 1.3.13 → 1.4.0 (minor bump: additive integration).
+- `README.md` agent inventory (33 → 47), prompt-file list, MCP servers table, and "What Gets Copied" table updated.
+- Donor's `edit: ask` / `bash: ask` permission posture **rejected** — defuj's allow-with-deny-lists model preserved untouched (see `docs/INTEGRATION_ANALYSIS.md` §5).
+
+### Not integrated (and why)
+
+- `oh-my-opencode` plugin + `04-omo-main-flow` workflow (external dependency, conflicts with native leader orchestration)
+- `penetration-tester`, `qa-automation-engineer`, `ml-engineer`, `explorer-agent`, `orchestrator`, `mobile-native`, `frontend-specialist`, `backend-specialist` and 8 other donor agents (duplicates of defuj agents/built-ins)
+- `notification.ts` plugin (Windows-only toast, TUI-intrusive), Netlify & Daytona MCPs (require account API keys), `ruplacer.exe` (unvetted binary)
+- 13 redundant donor skills (see `docs/INTEGRATION_ANALYSIS.md` §4.2)
+
 ## [1.3.13] - 2026-07-06
 
 ### Added
