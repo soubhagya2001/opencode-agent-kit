@@ -1,8 +1,51 @@
 #!/usr/bin/env node
-import { spawn } from 'child_process';
+// agentmemory MCP launcher for OpenCode.
+//
+// 1. Reuses a running agentmemory server on :3111, or starts one in the
+//    background (agentmemory installed globally or run via npx as fallback).
+// 2. Hands stdio over to the @agentmemory/mcp bridge so the MCP client
+//    (OpenCode) can talk to it.
+import { spawn, execSync } from 'child_process';
+import { existsSync } from 'fs';
+import { join } from 'path';
 
+const IS_WIN = process.platform === 'win32';
 const PORT = process.env.AGENTMEMORY_URL || 'http://localhost:3111';
-const HEALTH = `${PORT}/agentmemory/livez`;
+const HEALTH = PORT + '/agentmemory/livez';
+
+// Resolve the global npm root once (and cache it), preferring direct binaries
+// over npx to avoid cold-start latency that can trip MCP handshake timeouts.
+let globalRoot = null;
+function getGlobalRoot() {
+  if (globalRoot !== null) return globalRoot;
+  try {
+    globalRoot = execSync('npm root -g', { encoding: 'utf8' }).trim();
+  } catch {
+    globalRoot = '';
+  }
+  return globalRoot;
+}
+
+function globalBin(pkg, bin) {
+  const root = getGlobalRoot();
+  if (!root) return null;
+  const p = join(root, pkg, bin);
+  return existsSync(p) ? p : null;
+}
+
+function resolveServerLauncher() {
+  const bin = globalBin('@agentmemory/agentmemory', join('dist', 'cli.mjs'));
+  if (bin) return { cmd: 'node', args: [bin] };
+  if (IS_WIN) return { cmd: 'cmd.exe', args: ['/d', '/s', '/c', 'npx', '@agentmemory/agentmemory'] };
+  return { cmd: 'npx', args: ['@agentmemory/agentmemory'] };
+}
+
+function resolveMcpBridge() {
+  const bin = globalBin('@agentmemory/mcp', 'bin.mjs');
+  if (bin) return { cmd: 'node', args: [bin] };
+  if (IS_WIN) return { cmd: 'cmd.exe', args: ['/d', '/s', '/c', 'npx', '-y', '@agentmemory/mcp'] };
+  return { cmd: 'npx', args: ['-y', '@agentmemory/mcp'] };
+}
 
 async function isRunning() {
   try {
@@ -24,7 +67,8 @@ async function waitForServer(timeout = 15000) {
 
 async function main() {
   if (!(await isRunning())) {
-    const proc = spawn('npx', ['@agentmemory/agentmemory'], {
+    const { cmd, args } = resolveServerLauncher();
+    const proc = spawn(cmd, args, {
       stdio: 'ignore',
       detached: true,
     });
@@ -37,7 +81,8 @@ async function main() {
     }
   }
 
-  const mcp = spawn('npx', ['-y', '@agentmemory/mcp', ...process.argv.slice(2)], {
+  const { cmd, args } = resolveMcpBridge();
+  const mcp = spawn(cmd, [...args, ...process.argv.slice(2)], {
     stdio: ['inherit', 'inherit', 'inherit'],
   });
 

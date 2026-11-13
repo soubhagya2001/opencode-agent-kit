@@ -90,10 +90,10 @@
       "enabled": false
     },
     "playwright": {
-      "type": "stdio",
-      "command": "npx",
-      "args": ["-y", "@modelcontextprotocol/server-playwright"],
+      "type": "local",
+      "command": ["npx", "-y", "@playwright/mcp@latest"],
       "enabled": true,
+      "timeout": 90000,
       "description": "Browser automation and E2E testing with Playwright"
     },
     "stitch": {
@@ -116,7 +116,7 @@
     "sonarqube": {
       "type": "remote",
       "url": "https://sonarqube-mcp.sadigit.co.id/mcp",
-      "enabled": true,
+      "enabled": false,
       "headers": {
         "Authorization": "Bearer ${SONARQUBE_TOKEN}",
         "SONARQUBE_TOOLSETS": "analysis,issues,security-hotspots,quality-gates,rules,duplications,measures,dependency-risks,coverage,sources,languages,portfolios,system,webhooks"
@@ -142,6 +142,7 @@
         "1200"
       ],
       "enabled": true,
+      "timeout": 90000,
       "description": "Chrome DevTools browser control: navigate, screenshot, inspect console/network/performance"
     },
     "agent-browser": {
@@ -155,10 +156,23 @@
         "core,network,react,tabs,debug"
       ],
       "enabled": true,
+      "timeout": 90000,
       "description": "Fast Rust-based browser automation: annotated screenshots, visual diff, React introspection"
+    },
+    "context7": {
+      "type": "remote",
+      "url": "https://mcp.context7.com/mcp",
+      "enabled": true,
+      "description": "Context7 live library and API documentation lookup (no API key required)"
+    },
+    "shadcn": {
+      "type": "local",
+      "command": ["npx", "-y", "shadcn@latest", "mcp"],
+      "enabled": true,
+      "timeout": 90000,
+      "description": "shadcn/ui registry, component scaffolding, and docs for React/shadcn work"
     }
   },
-  "plugin": [".opencode/plugins/agentmemory-capture.ts", ".opencode/plugins/ponytail.mjs"],
   "agent": {
     "leader": {
       "description": "IT Leader & Technical Project Manager \u2014 analyzes requirements, designs architecture, decomposes tasks, delegates to subagents, and unifies outputs",
@@ -1267,6 +1281,497 @@
           "du *": "allow",
           "df *": "allow",
           "agentmemory*": "allow"
+        }
+      }
+    },
+    "planner": {
+      "description": "Project Planner & Requirements Analyst — decomposes requests into phased plans with dependencies, risks, and acceptance criteria (subagent of IT Leader)",
+      "mode": "subagent",
+      "prompt": "{file:.opencode/prompts/agents/planner.md}",
+      "color": "#c026d3",
+      "permission": {
+        "edit": "allow",
+        "webfetch": "allow",
+        "skill": "allow",
+        "bash": {
+          "*": "allow",
+          "ls *": "allow",
+          "pwd": "allow",
+          "which *": "allow",
+          "type *": "allow",
+          "mkdir *": "allow",
+          "cp *": "allow",
+          "mv *": "allow",
+          "echo *": "allow",
+          "printf *": "allow",
+          "date": "allow",
+          "uname *": "allow",
+          "whoami": "allow",
+          "file *": "allow",
+          "wc *": "allow",
+          "du *": "allow",
+          "df *": "allow",
+          "git status": "allow",
+          "git diff": "allow",
+          "git log*": "allow"
+        },
+        "context7_*": "allow"
+      }
+    },
+    "architect": {
+      "description": "Software Architect — advisory system design, trade-off evaluation, and ADR documentation without direct implementation (subagent of IT Leader)",
+      "mode": "subagent",
+      "prompt": "{file:.opencode/prompts/agents/architect.md}",
+      "color": "#0f766e",
+      "permission": {
+        "edit": "allow",
+        "webfetch": "allow",
+        "skill": "allow",
+        "bash": {
+          "*": "allow",
+          "ls *": "allow",
+          "pwd": "allow",
+          "which *": "allow",
+          "type *": "allow",
+          "mkdir *": "allow",
+          "cp *": "allow",
+          "mv *": "allow",
+          "echo *": "allow",
+          "printf *": "allow",
+          "date": "allow",
+          "uname *": "allow",
+          "whoami": "allow",
+          "file *": "allow",
+          "wc *": "allow",
+          "du *": "allow",
+          "df *": "allow",
+          "git status": "allow",
+          "git diff": "allow",
+          "git log*": "allow"
+        },
+        "context7_*": "allow"
+      }
+    },
+    "product-manager": {
+      "description": "Product Manager — requirements discovery, user stories, acceptance criteria, and PRD drafts handed off to planning and design (subagent of IT Leader)",
+      "mode": "subagent",
+      "prompt": "{file:.opencode/prompts/agents/product-manager.md}",
+      "color": "#db2777",
+      "permission": {
+        "edit": "allow",
+        "webfetch": "allow",
+        "skill": "allow",
+        "bash": {
+          "*": "allow",
+          "ls *": "allow",
+          "pwd": "allow",
+          "which *": "allow",
+          "type *": "allow",
+          "mkdir *": "allow",
+          "cp *": "allow",
+          "mv *": "allow",
+          "echo *": "allow",
+          "printf *": "allow",
+          "date": "allow",
+          "uname *": "allow",
+          "whoami": "allow",
+          "file *": "allow",
+          "wc *": "allow",
+          "du *": "allow",
+          "df *": "allow",
+          "git status": "allow",
+          "git diff": "allow",
+          "git log*": "allow"
+        }
+      }
+    },
+    "api-architect": {
+      "description": "API Architect — designs REST and GraphQL contracts, versioning, pagination, and error standards as shared delegation contracts (subagent of IT Leader)",
+      "mode": "subagent",
+      "prompt": "{file:.opencode/prompts/agents/api-architect.md}",
+      "color": "#0369a1",
+      "permission": {
+        "edit": "allow",
+        "webfetch": "allow",
+        "skill": "allow",
+        "bash": {
+          "*": "allow",
+          "ls *": "allow",
+          "pwd": "allow",
+          "which *": "allow",
+          "type *": "allow",
+          "mkdir *": "allow",
+          "cp *": "allow",
+          "mv *": "allow",
+          "echo *": "allow",
+          "printf *": "allow",
+          "date": "allow",
+          "uname *": "allow",
+          "whoami": "allow",
+          "file *": "allow",
+          "wc *": "allow",
+          "du *": "allow",
+          "df *": "allow",
+          "npm *": "allow",
+          "pnpm *": "allow",
+          "bun *": "allow",
+          "yarn *": "allow"
+        },
+        "postman_*": "allow",
+        "context7_*": "allow"
+      }
+    },
+    "data-engineer": {
+      "description": "Data Engineer — ETL pipelines, warehouse modeling, batch/stream processing, and data quality tooling (subagent of IT Leader)",
+      "mode": "subagent",
+      "prompt": "{file:.opencode/prompts/agents/data-engineer.md}",
+      "color": "#92400e",
+      "permission": {
+        "edit": "allow",
+        "webfetch": "allow",
+        "skill": "allow",
+        "bash": {
+          "*": "allow",
+          "ls *": "allow",
+          "pwd": "allow",
+          "which *": "allow",
+          "type *": "allow",
+          "mkdir *": "allow",
+          "cp *": "allow",
+          "mv *": "allow",
+          "echo *": "allow",
+          "printf *": "allow",
+          "date": "allow",
+          "uname *": "allow",
+          "whoami": "allow",
+          "file *": "allow",
+          "wc *": "allow",
+          "du *": "allow",
+          "df *": "allow",
+          "python*": "allow",
+          "pip*": "allow",
+          "pytest*": "allow",
+          "docker *": "allow"
+        }
+      }
+    },
+    "debugger": {
+      "description": "Systematic Debugger — 4-phase root-cause investigation (investigate, analyze, hypothesize, fix) across all stacks (subagent of IT Leader)",
+      "mode": "subagent",
+      "prompt": "{file:.opencode/prompts/agents/debugger.md}",
+      "color": "#e11d48",
+      "permission": {
+        "edit": "allow",
+        "webfetch": "allow",
+        "skill": "allow",
+        "bash": {
+          "*": "allow",
+          "ls *": "allow",
+          "pwd": "allow",
+          "which *": "allow",
+          "type *": "allow",
+          "mkdir *": "allow",
+          "cp *": "allow",
+          "mv *": "allow",
+          "echo *": "allow",
+          "printf *": "allow",
+          "date": "allow",
+          "uname *": "allow",
+          "whoami": "allow",
+          "file *": "allow",
+          "wc *": "allow",
+          "du *": "allow",
+          "df *": "allow",
+          "npm *": "allow",
+          "pnpm *": "allow",
+          "bun *": "allow",
+          "yarn *": "allow",
+          "python*": "allow"
+        },
+        "chrome-devtools_*": "allow"
+      }
+    },
+    "test-engineer": {
+      "description": "Test Engineer — TDD-first unit/integration/E2E coverage, owns test files and test infrastructure (subagent of IT Leader)",
+      "mode": "subagent",
+      "prompt": "{file:.opencode/prompts/agents/test-engineer.md}",
+      "color": "#166534",
+      "permission": {
+        "edit": "allow",
+        "webfetch": "allow",
+        "skill": "allow",
+        "bash": {
+          "*": "allow",
+          "ls *": "allow",
+          "pwd": "allow",
+          "which *": "allow",
+          "type *": "allow",
+          "mkdir *": "allow",
+          "cp *": "allow",
+          "mv *": "allow",
+          "echo *": "allow",
+          "printf *": "allow",
+          "date": "allow",
+          "uname *": "allow",
+          "whoami": "allow",
+          "file *": "allow",
+          "wc *": "allow",
+          "du *": "allow",
+          "df *": "allow",
+          "npm *": "allow",
+          "pnpm *": "allow",
+          "bun *": "allow",
+          "yarn *": "allow",
+          "pytest*": "allow",
+          "npx playwright*": "allow"
+        },
+        "playwright_*": "allow",
+        "chrome-devtools_*": "allow"
+      }
+    },
+    "security-auditor": {
+      "description": "Security Auditor — OWASP-based threat modeling, secrets scanning, auth flow review, and vulnerability triage (subagent of IT Leader)",
+      "mode": "subagent",
+      "prompt": "{file:.opencode/prompts/agents/security-auditor.md}",
+      "color": "#991b1b",
+      "permission": {
+        "edit": "allow",
+        "webfetch": "allow",
+        "skill": "allow",
+        "bash": {
+          "*": "allow",
+          "ls *": "allow",
+          "pwd": "allow",
+          "which *": "allow",
+          "type *": "allow",
+          "mkdir *": "allow",
+          "cp *": "allow",
+          "mv *": "allow",
+          "echo *": "allow",
+          "printf *": "allow",
+          "date": "allow",
+          "uname *": "allow",
+          "whoami": "allow",
+          "file *": "allow",
+          "wc *": "allow",
+          "du *": "allow",
+          "df *": "allow",
+          "npm *": "allow",
+          "pnpm *": "allow",
+          "pip*": "allow",
+          "git status": "allow",
+          "git diff": "allow",
+          "git log*": "allow"
+        }
+      }
+    },
+    "performance-optimizer": {
+      "description": "Performance Optimizer — measurement-first profiling, bottleneck analysis, and verified optimization for frontend and backend (subagent of IT Leader)",
+      "mode": "subagent",
+      "prompt": "{file:.opencode/prompts/agents/performance-optimizer.md}",
+      "color": "#a16207",
+      "permission": {
+        "edit": "allow",
+        "webfetch": "allow",
+        "skill": "allow",
+        "bash": {
+          "*": "allow",
+          "ls *": "allow",
+          "pwd": "allow",
+          "which *": "allow",
+          "type *": "allow",
+          "mkdir *": "allow",
+          "cp *": "allow",
+          "mv *": "allow",
+          "echo *": "allow",
+          "printf *": "allow",
+          "date": "allow",
+          "uname *": "allow",
+          "whoami": "allow",
+          "file *": "allow",
+          "wc *": "allow",
+          "du *": "allow",
+          "df *": "allow",
+          "npm *": "allow",
+          "pnpm *": "allow",
+          "bun *": "allow",
+          "yarn *": "allow",
+          "npx playwright*": "allow"
+        },
+        "chrome-devtools_*": "allow",
+        "playwright_*": "allow"
+      }
+    },
+    "code-archaeologist": {
+      "description": "Code Archaeologist — reconstructs intent from legacy code, maps architecture drift, and documents undocumented systems (subagent of IT Leader)",
+      "mode": "subagent",
+      "prompt": "{file:.opencode/prompts/agents/code-archaeologist.md}",
+      "color": "#57534e",
+      "permission": {
+        "edit": "allow",
+        "webfetch": "allow",
+        "skill": "allow",
+        "bash": {
+          "*": "allow",
+          "ls *": "allow",
+          "pwd": "allow",
+          "which *": "allow",
+          "type *": "allow",
+          "mkdir *": "allow",
+          "cp *": "allow",
+          "mv *": "allow",
+          "echo *": "allow",
+          "printf *": "allow",
+          "date": "allow",
+          "uname *": "allow",
+          "whoami": "allow",
+          "file *": "allow",
+          "wc *": "allow",
+          "du *": "allow",
+          "df *": "allow",
+          "git status": "allow",
+          "git diff": "allow",
+          "git log*": "allow"
+        }
+      }
+    },
+    "doc-writer": {
+      "description": "Documentation Writer — Diataxis-framework docs (tutorial/how-to/reference/explanation), README and CHANGELOG maintenance (subagent of IT Leader)",
+      "mode": "subagent",
+      "prompt": "{file:.opencode/prompts/agents/doc-writer.md}",
+      "color": "#64748b",
+      "permission": {
+        "edit": "allow",
+        "webfetch": "allow",
+        "skill": "allow",
+        "bash": {
+          "*": "allow",
+          "ls *": "allow",
+          "pwd": "allow",
+          "which *": "allow",
+          "type *": "allow",
+          "mkdir *": "allow",
+          "cp *": "allow",
+          "mv *": "allow",
+          "echo *": "allow",
+          "printf *": "allow",
+          "date": "allow",
+          "uname *": "allow",
+          "whoami": "allow",
+          "file *": "allow",
+          "wc *": "allow",
+          "du *": "allow",
+          "df *": "allow",
+          "git status": "allow",
+          "git diff": "allow",
+          "git log*": "allow"
+        }
+      }
+    },
+    "cloud-architect": {
+      "description": "Cloud Architect — AWS/Azure/GCP architecture, serverless design, scaling strategy, and cost optimization (subagent of IT Leader)",
+      "mode": "subagent",
+      "prompt": "{file:.opencode/prompts/agents/cloud-architect.md}",
+      "color": "#4338ca",
+      "permission": {
+        "edit": "allow",
+        "webfetch": "allow",
+        "skill": "allow",
+        "bash": {
+          "*": "allow",
+          "ls *": "allow",
+          "pwd": "allow",
+          "which *": "allow",
+          "type *": "allow",
+          "mkdir *": "allow",
+          "cp *": "allow",
+          "mv *": "allow",
+          "echo *": "allow",
+          "printf *": "allow",
+          "date": "allow",
+          "uname *": "allow",
+          "whoami": "allow",
+          "file *": "allow",
+          "wc *": "allow",
+          "du *": "allow",
+          "df *": "allow",
+          "docker *": "allow",
+          "terraform*": "allow",
+          "kubectl*": "allow",
+          "aws *": "allow",
+          "gcloud *": "allow",
+          "az *": "allow"
+        }
+      }
+    },
+    "ruby-developer": {
+      "description": "Ruby/Rails developer for REST APIs, Hotwire/Turbo, Active Record, and modern Rails 7+ applications (subagent of IT Leader)",
+      "mode": "subagent",
+      "prompt": "{file:.opencode/prompts/agents/ruby-developer.md}",
+      "color": "#CC342D",
+      "permission": {
+        "edit": "allow",
+        "webfetch": "allow",
+        "skill": "allow",
+        "bash": {
+          "*": "allow",
+          "ls *": "allow",
+          "pwd": "allow",
+          "which *": "allow",
+          "type *": "allow",
+          "mkdir *": "allow",
+          "cp *": "allow",
+          "mv *": "allow",
+          "echo *": "allow",
+          "printf *": "allow",
+          "date": "allow",
+          "uname *": "allow",
+          "whoami": "allow",
+          "file *": "allow",
+          "wc *": "allow",
+          "du *": "allow",
+          "df *": "allow",
+          "ruby*": "allow",
+          "gem*": "allow",
+          "bundle*": "allow",
+          "bundler*": "allow",
+          "rails*": "allow",
+          "rake*": "allow",
+          "rspec*": "allow"
+        }
+      }
+    },
+    "game-developer": {
+      "description": "Game Developer — cross-platform game development principles for web, PC, mobile, and VR/AR, with engine and asset guidance (subagent of IT Leader)",
+      "mode": "subagent",
+      "prompt": "{file:.opencode/prompts/agents/game-developer.md}",
+      "color": "#a855f7",
+      "permission": {
+        "edit": "allow",
+        "webfetch": "allow",
+        "skill": "allow",
+        "bash": {
+          "*": "allow",
+          "ls *": "allow",
+          "pwd": "allow",
+          "which *": "allow",
+          "type *": "allow",
+          "mkdir *": "allow",
+          "cp *": "allow",
+          "mv *": "allow",
+          "echo *": "allow",
+          "printf *": "allow",
+          "date": "allow",
+          "uname *": "allow",
+          "whoami": "allow",
+          "file *": "allow",
+          "wc *": "allow",
+          "du *": "allow",
+          "df *": "allow",
+          "npm *": "allow",
+          "pnpm *": "allow",
+          "bun *": "allow",
+          "yarn *": "allow"
         }
       }
     }
